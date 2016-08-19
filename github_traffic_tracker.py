@@ -5,6 +5,7 @@ from datetime import datetime
 import os
 import pycurl
 from io import BytesIO
+from repo import repo_data
 
 def main():
     #get credentials
@@ -14,7 +15,7 @@ def main():
     #create command
     curl_header = ['Authorization: token {0}'.format(cred), 'Accept: application/vnd.github.spiderman-preview']
     curl_command = 'curl -i -H "" -H ""'
-    curl_url = 'https://api.github.com/repos/kyleniemeyer/pyJac/traffic/{}'
+    curl_url = 'https://api.github.com/repos/{0}/{1}/traffic/{{}}'.format(repo_data['user'], repo_data['repo'])
     curl_command = curl_command.format(cred)
 
     #create / open DB
