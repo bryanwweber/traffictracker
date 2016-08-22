@@ -65,6 +65,7 @@ def main():
     while True:
         try:
             #query view api
+            view_data.truncate(0)
             py_views.perform()
             views = json.loads(view_data.getvalue())
 
@@ -74,6 +75,7 @@ def main():
                             view_rows)
 
             #query clone api
+            clone_data.truncate(0)
             py_clones.perform()
             clones = json.loads(clone_data.getvalue())
 
