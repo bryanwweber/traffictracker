@@ -39,21 +39,6 @@ def main():
         if str(e) != "table clones already exists":
             raise e
 
-    view_data = BytesIO()
-    #create curl objects
-    py_views = pycurl.Curl()
-    py_views.setopt(pycurl.URL, curl_url.format('views'))
-    py_views.setopt(pycurl.HTTPHEADER, curl_header)
-    #py_views.setopt(pycurl.HEADER, 1)
-    py_views.setopt(pycurl.WRITEFUNCTION, view_data.write)
-
-    clone_data = BytesIO()
-    py_clones = pycurl.Curl()
-    py_clones.setopt(pycurl.URL, curl_url.format('clones'))
-    py_clones.setopt(pycurl.HTTPHEADER, curl_header)
-    #py_clones.setopt(pycurl.HEADER, 1)
-    py_clones.setopt(pycurl.WRITEFUNCTION, clone_data.write)
-
     tzinfo = datetime.now().tzinfo
     def __parse_row(row):
         date = datetime.fromtimestamp(row['timestamp'] / 1000.0, tzinfo)
@@ -64,8 +49,22 @@ def main():
     err_count = 0
     while True:
         try:
+            view_data = BytesIO()
+            #create curl objects
+            py_views = pycurl.Curl()
+            py_views.setopt(pycurl.URL, curl_url.format('views'))
+            py_views.setopt(pycurl.HTTPHEADER, curl_header)
+            #py_views.setopt(pycurl.HEADER, 1)
+            py_views.setopt(pycurl.WRITEFUNCTION, view_data.write)
+
+            clone_data = BytesIO()
+            py_clones = pycurl.Curl()
+            py_clones.setopt(pycurl.URL, curl_url.format('clones'))
+            py_clones.setopt(pycurl.HTTPHEADER, curl_header)
+            #py_clones.setopt(pycurl.HEADER, 1)
+            py_clones.setopt(pycurl.WRITEFUNCTION, clone_data.write)
+
             #query view api
-            view_data.truncate(0)
             py_views.perform()
             views = json.loads(view_data.getvalue())
 
@@ -75,7 +74,6 @@ def main():
                             view_rows)
 
             #query clone api
-            clone_data.truncate(0)
             py_clones.perform()
             clones = json.loads(clone_data.getvalue())
 
