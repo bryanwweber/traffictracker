@@ -70,7 +70,7 @@ def main():
 
             #parse into rows for DB
             view_rows = [__parse_row(row) for row in views['views']]
-            c.executemany('INSERT OR IGNORE INTO traffic VALUES (?, ?, ?)',
+            c.executemany('INSERT OR REPLACE INTO traffic VALUES (?, ?, ?)',
                             view_rows)
 
             #query clone api
@@ -79,7 +79,7 @@ def main():
 
             #parse into rows for DB
             clone_rows = [__parse_row(row) for row in clones['clones']]
-            c.executemany('INSERT OR IGNORE INTO clones VALUES (?, ?, ?)',
+            c.executemany('INSERT OR REPLACE INTO clones VALUES (?, ?, ?)',
                             clone_rows)
             db.commit()
 
