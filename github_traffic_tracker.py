@@ -1,11 +1,32 @@
+from __future__ import print_function
+
 import json
 import sqlite3
 import time
 import dateutil.parser
+from datetime import datetime
 import os
 import pycurl
 from io import BytesIO
 from repo import repo_data
+import keyring
+import yagmail
+
+def error_report(error_message):
+    try:
+        #note, this requires the user to call yagmail.register('email', 'password')
+        #at least once to set up the keychain
+        yag = yagmail.SMTP(repo_data['email'])
+        yag.send(subject='Error while tracking repo {}'.format(repo_data['repo']),
+            contents=['{}'.format(error_message)])
+    except KeyError:
+        print(error_message)
+        print('Could not find email in repo data... exiting.')
+    except keyring.errors:
+        print(error_message)
+        print('Could not properly load the email from the keyring, exiting.')
+    except Exception as e:
+        print(error_message)
 
 def main():
     #get credentials
@@ -97,4 +118,5 @@ def main():
 
 
 if __name__ == '__main__':
+    error_report('a')
     main()
