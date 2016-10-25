@@ -44,7 +44,11 @@ def main():
 
     tzinfo = datetime.now().tzinfo
     def __parse_row(row):
-        date = dateutil.parser.parse(row['timestamp'], tzinfo)
+        try:
+            date = dateutil.parser.parse(row['timestamp'], tzinfo)
+        except:
+            #try the old style timestamp
+            date = datetime.fromtimestamp(row['timestamp'] / 1000., tzinfo)
         count = int(row['count'])
         unique = int(row['uniques'])
         return (date, count, unique)
