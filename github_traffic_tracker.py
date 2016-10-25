@@ -1,7 +1,7 @@
 import json
 import sqlite3
 import time
-from datetime import datetime
+import dateutil.parser
 import os
 import pycurl
 from io import BytesIO
@@ -41,7 +41,7 @@ def main():
 
     tzinfo = datetime.now().tzinfo
     def __parse_row(row):
-        date = datetime.fromtimestamp(row['timestamp'] / 1000.0, tzinfo)
+        date = dateutil.parser.parse(row['timestamp'], tzinfo)
         count = int(row['count'])
         unique = int(row['uniques'])
         return (date, count, unique)
