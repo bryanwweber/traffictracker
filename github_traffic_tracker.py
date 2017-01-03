@@ -78,7 +78,7 @@ def main():
             #parse into rows for DB
             view_rows = [__parse_row(row) for row in views['views']]
             c.executemany('INSERT OR REPLACE INTO traffic VALUES (?, ?, ?)',
-                            view_rows)
+                        view_rows)
 
             #query clone api
             py_clones.perform()
@@ -95,7 +95,10 @@ def main():
             #update every hour
             time.sleep(60 * 60)
 
-        except Exception, e:
+        except KeyError as e:
+            raise Exception('Repo {}/{} not found!'.format(repo_data['user'], repo_data['repo']))
+
+        except Exception as e:
             err_count += 1
             time.sleep(5 * 60)
             if err_count == 10:
