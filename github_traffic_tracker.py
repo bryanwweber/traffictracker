@@ -58,21 +58,22 @@ def main():
         return (date, count, unique)
 
     err_count = 0
-    while True:
+    found = False
+    while not found:
         try:
             view_data = BytesIO()
             # create curl objects
             py_views = pycurl.Curl()
             py_views.setopt(pycurl.URL, curl_url.format('views'))
             py_views.setopt(pycurl.HTTPHEADER, curl_header)
-            #py_views.setopt(pycurl.HEADER, 1)
+            # py_views.setopt(pycurl.HEADER, 1)
             py_views.setopt(pycurl.WRITEFUNCTION, view_data.write)
 
             clone_data = BytesIO()
             py_clones = pycurl.Curl()
             py_clones.setopt(pycurl.URL, curl_url.format('clones'))
             py_clones.setopt(pycurl.HTTPHEADER, curl_header)
-            #py_clones.setopt(pycurl.HEADER, 1)
+            # py_clones.setopt(pycurl.HEADER, 1)
             py_clones.setopt(pycurl.WRITEFUNCTION, clone_data.write)
 
             # query view api
@@ -94,10 +95,7 @@ def main():
                           clone_rows)
             db.commit()
 
-            err_count = 0
-
-            # update every hour
-            time.sleep(60 * 60)
+            found = True
 
         except KeyError as e:
             raise Exception(
