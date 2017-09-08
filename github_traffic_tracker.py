@@ -5,10 +5,27 @@ import sqlite3
 import time
 import dateutil.parser
 from datetime import datetime
-import os
 import pycurl
 from io import BytesIO
 from repo import repo_data
+
+
+def create(cursor):
+    try:
+        cursor.execute('''CREATE TABLE traffic
+                    (time TIMESTAMP UNIQUE, views INTEGER, unique_views INTEGER)
+                ''')
+    except sqlite3.OperationalError, e:
+        if str(e) != "table traffic already exists":
+            raise e
+
+    try:
+        cursor.execute('''CREATE TABLE clones
+                    (time TIMESTAMP UNIQUE, count INTEGER, unique_count INTEGER)
+                ''')
+    except sqlite3.OperationalError, e:
+        if str(e) != "table clones already exists":
+            raise e
 
 
 def main():
@@ -29,21 +46,7 @@ def main():
     c = db.cursor()
 
     # create schema
-    try:
-        c.execute('''CREATE TABLE traffic
-                    (time timestamp UNIQUE, views INTEGER, unique_views INTEGER)
-                ''')
-    except sqlite3.OperationalError, e:
-        if str(e) != "table traffic already exists":
-            raise e
-
-    try:
-        c.execute('''CREATE TABLE clones
-                    (time timestamp UNIQUE, count INTEGER, unique_count INTEGER)
-                ''')
-    except sqlite3.OperationalError, e:
-        if str(e) != "table clones already exists":
-            raise e
+    create(c)
 
     tzinfo = datetime.now().tzinfo
 

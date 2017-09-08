@@ -4,6 +4,7 @@ import dateutil.parser
 import matplotlib.pyplot as plt
 import numpy as np
 import pytz
+from github_traffic_tracker import create
 
 
 utc = pytz.UTC
@@ -19,6 +20,9 @@ sqlite3.register_adapter(datetime, timestamp_parser)
 sqlite3.register_adapter(date, timestamp_parser)
 db = sqlite3.connect('traffic.db')
 c = db.cursor()
+
+# create schema
+create(c)
 
 # get clone data
 c.execute('SELECT time, unique_count from CLONES')
