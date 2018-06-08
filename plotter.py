@@ -4,6 +4,7 @@ import dateutil.parser
 import matplotlib.pyplot as plt
 import numpy as np
 import pytz
+import six
 from github_traffic_tracker import create
 
 
@@ -33,7 +34,7 @@ for row in c:
     dates[date] = row[1]
 
 # get sorted
-dates, vals = zip(*sorted(dates.iteritems(), key=lambda x: x[0]))
+dates, vals = zip(*sorted(six.iteritems(dates), key=lambda x: x[0]))
 vals = np.cumsum(vals)
 plt.plot(dates, vals)
 plt.ylabel('Total pyJac Clones')
@@ -50,7 +51,7 @@ for row in c:
     dates[date] = row[1]
 
 # get sorted
-dates, vals = zip(*sorted(dates.iteritems(), key=lambda x: x[0]))
+dates, vals = zip(*sorted(six.iteritems(dates), key=lambda x: x[0]))
 vals = np.cumsum(vals)
 plt.plot(dates, vals)
 plt.ylabel('Total pyJac Views')

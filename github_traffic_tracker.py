@@ -15,7 +15,7 @@ def create(cursor):
         cursor.execute('''CREATE TABLE traffic
                     (time TIMESTAMP UNIQUE, views INTEGER, unique_views INTEGER)
                 ''')
-    except sqlite3.OperationalError, e:
+    except sqlite3.OperationalError as e:
         if str(e) != "table traffic already exists":
             raise e
 
@@ -23,7 +23,7 @@ def create(cursor):
         cursor.execute('''CREATE TABLE clones
                     (time TIMESTAMP UNIQUE, count INTEGER, unique_count INTEGER)
                 ''')
-    except sqlite3.OperationalError, e:
+    except sqlite3.OperationalError as e:
         if str(e) != "table clones already exists":
             raise e
 
