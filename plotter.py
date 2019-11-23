@@ -4,7 +4,6 @@ import dateutil.parser
 import matplotlib.pyplot as plt
 import numpy as np
 import pytz
-import six
 from github_traffic_tracker import create
 
 
@@ -19,14 +18,14 @@ def timestamp_parser(val):
 # create / open DB
 sqlite3.register_adapter(datetime, timestamp_parser)
 sqlite3.register_adapter(date, timestamp_parser)
-db = sqlite3.connect('traffic.db')
+db = sqlite3.connect("traffic.db")
 c = db.cursor()
 
 # create schema
 create(c)
 
 # get clone data
-c.execute('SELECT time, unique_count from CLONES')
+c.execute("SELECT time, unique_count from CLONES")
 
 dates = {}
 for row in c:
@@ -34,16 +33,16 @@ for row in c:
     dates[date] = row[1]
 
 # get sorted
-dates, vals = zip(*sorted(six.iteritems(dates), key=lambda x: x[0]))
+dates, vals = zip(*sorted(dates.items(), key=lambda x: x[0]))
 vals = np.cumsum(vals)
 plt.plot(dates, vals)
-plt.ylabel('Total pyJac Clones')
-plt.xlabel('Date')
+plt.ylabel("Total Cantera Clones")
+plt.xlabel("Date")
 plt.show()
 
 
 # get clone data
-c.execute('SELECT time, unique_views from TRAFFIC')
+c.execute("SELECT time, unique_views from TRAFFIC")
 
 dates = {}
 for row in c:
@@ -51,9 +50,9 @@ for row in c:
     dates[date] = row[1]
 
 # get sorted
-dates, vals = zip(*sorted(six.iteritems(dates), key=lambda x: x[0]))
+dates, vals = zip(*sorted(dates.items(), key=lambda x: x[0]))
 vals = np.cumsum(vals)
 plt.plot(dates, vals)
-plt.ylabel('Total pyJac Views')
-plt.xlabel('Date')
+plt.ylabel("Total Cantera Views")
+plt.xlabel("Date")
 plt.show()
